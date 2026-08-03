@@ -1,4 +1,4 @@
-# 🛡️ E-Commerce Backend: Security Scan & Triage Center
+# Weekend Recon: Node Base Image Scanned
 
 This repository houses the backend services for the e-commerce platform. To ensure compliance with payment processing standards and safeguard customer data, all container infrastructure undergoes automated dependency screening.
 

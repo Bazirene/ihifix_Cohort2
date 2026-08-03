@@ -1,4 +1,4 @@
-Security Scan Report: E-Commerce Backend Container Image
+Weekend Recon: Node Base Image Scanned
 
 This report outlines the security vulnerability assessment performed on the e-commerce backend Docker image. The analysis focuses on identifying critical infrastructure flaws and detailing remediation paths before production deployment.
 
