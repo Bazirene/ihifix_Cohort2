@@ -1,0 +1,11 @@
+# Docker
+*.log
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+#IDE
+.vscode/
+*.swp

@@ -1,0 +1,30 @@
+version: '28.5.2+dfsg4'
+
+services:
+  app:
+    image: python:3.9-slim
+    container_name: ihifix_app
+    command: ["sleep", "3600"]
+    networks:
+      - public
+      - private
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: ihifix_postgres
+    environment:
+      POSTGRES_PASSWORD: secure_password_123
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+    networks:
+      - private
+
+  redis:
+    image: redis:7-alpine
+    container_name: ihifix_redis
+    command: redis-server --requirepass redis_secret_password
+    networks:
+      - private
+
+networks:
+  public:
+  private:
