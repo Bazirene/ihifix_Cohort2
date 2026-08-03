@@ -75,3 +75,29 @@ CMD ["node", "dist/main.js"]
 **Date:** August 2026  
 **Status:** Pending Re-Scan
 
+
+Weekend Recon: Node Base Image
+
+### 🤖 AI Prompt Journal
+
+To maintain an explicit compliance record for auditing teams, we log how automated assistance tools were utilized to evaluate code and construct these patches.
+
+#### 1. Prompt Used
+* **User Input:** *"I am preparing to deploy an e-commerce backend on the node:18-alpine Docker image. Analyze these Trivy scan results. Identify the top 2 vulnerabilities (CVEs) I need to be aware of, and explain in simple terms how an attacker might exploit them against an online store application."*
+
+#### 2. AI Response
+> **Summary Analysis:** The base image `node:18-alpine` contains 2 Critical and 14 High vulnerabilities. The primary threat stems from using an End-of-Life (EOL) runtime that no longer receives downstream security fixes. The two most severe vulnerabilities posing immediate risk to an e-commerce platform are:
+> 
+> * **CVE-2026-31789 (Critical - Heap Buffer Overflow):** Located in OpenSSL (`libcrypto3`/`libssl3`). An attacker can exploit this by supplying a malformed security certificate containing an excessively large binary string. The system miscalculates the required storage buffer size due to an integer multiplication overflow. The data spills out-of-bounds, causing memory corruption that can be weaponized to crash your checkout endpoints or hijack code execution blocks.
+> * **CVE-2025-15467 (High - Stack Buffer Overflow):** Located in OpenSSL (`libcrypto3`/`libssl3`). An attacker can send a manipulated, malicious cryptographic webhook payload (mimicking financial gateway processors like Stripe) carrying an oversized Initialization Vector (IV). Because the system omits boundary length verification before copying data into local stack memory, the extra data overwrites execution paths, immediately crashing the Node.js process (Denial of Service).
+> 
+> **Remediation Recommendation:** Transition your `Dockerfile` immediately to a supported Long-Term Support (LTS) environment (`FROM node:22-alpine`) and declare `USER node` to enforce non-root runtime permissions.
+
+#### 3. My Verification
+* **Action Taken:** Updated the local `Dockerfile` base image configuration to target the actively maintained `node:22-alpine` tag. Appended the `USER node` instruction directly before the main entrypoint to strip root execution privileges.
+* **Scan Results Validation:** Built the new container image locally and ran an isolated verification scan using the latest Trivy vulnerability database:
+  ```bash
+  trivy image ecom-backend:latest --severity CRITICAL,HIGH
+  ```
+* **Outcome:** The structural OpenSSL flaws (`CVE-2026-31789` and `CVE-2025-15467`) were successfully remediated via the base image upgrade. The scan report returned **0 Critical** and **0 High** alerts matching these components. The container process was verified to run under the unprivileged `node` UID via local runtime checks.
+Use code with caution.
